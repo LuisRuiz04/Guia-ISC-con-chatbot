@@ -1,0 +1,118 @@
+extends layout
+block contenido
+  header.encabezado.aparece
+    h1 Administración
+    p.sub Gestiona materias, consejos y proyectos. Los estudiantes solo pueden consultarlos.
+  nav.tabs-a.aparece(role="tablist")
+    button.tab-a.on(type="button", data-panel="materias") Materias #[span.cont #{materias.length}]
+    button.tab-a(type="button", data-panel="consejos") Consejos #[span.cont #{consejos.length}]
+    button.tab-a(type="button", data-panel="proyectos") Proyectos #[span.cont #{proyectos.length}]
+    button.tab-a(type="button", data-panel="usuarios") Usuarios #[span.cont #{usuarios.length}]
+
+  section.panel-a.on.aparece(data-panel="materias")
+    .panel-cab
+      h2 Materias
+      button.btn(type="button", data-nuevo="materias") Nueva materia
+    .tabla-wrap
+      table.tabla
+        thead: tr
+          th Clave
+          th Materia
+          th Sem.
+          th Cr.
+          th Área
+          th
+        tbody
+          each m in materias
+            tr(data-item=JSON.stringify(m))
+              td= m.clave
+              td= m.nombre
+              td= m.semestre
+              td= m.creditos
+              td= m.area
+              td.acciones
+                button.mini(type="button", data-editar="materias", data-id=m.id) Editar
+                button.mini.peligro(type="button", data-borrar="materias", data-id=m.id, data-nombre=m.nombre) Eliminar
+
+  section.panel-a(data-panel="consejos")
+    .panel-cab
+      h2 Consejos
+      button.btn(type="button", data-nuevo="consejos") Nuevo consejo
+    .tabla-wrap
+      table.tabla
+        thead: tr
+          th
+          th Título
+          th Sección
+          th Contenido
+          th
+        tbody
+          each c in consejos
+            tr(data-item=JSON.stringify(c))
+              td= c.icono
+              td= c.titulo
+              td= c.tipo === 'habitos' ? 'Hábitos' : 'Organización'
+              td.corto= c.contenido
+              td.acciones
+                button.mini(type="button", data-editar="consejos", data-id=c.id) Editar
+                button.mini.peligro(type="button", data-borrar="consejos", data-id=c.id, data-nombre=c.titulo) Eliminar
+
+  section.panel-a(data-panel="proyectos")
+    .panel-cab
+      h2 Proyectos
+      button.btn(type="button", data-nuevo="proyectos") Nuevo proyecto
+    .tabla-wrap
+      table.tabla
+        thead: tr
+          th Título
+          th Sem.
+          th Tecnologías
+          th
+        tbody
+          each p in proyectos
+            tr(data-item=JSON.stringify(p))
+              td= p.titulo
+              td= p.semestre
+              td= p.tecnologias
+              td.acciones
+                button.mini(type="button", data-editar="proyectos", data-id=p.id) Editar
+                button.mini.peligro(type="button", data-borrar="proyectos", data-id=p.id, data-nombre=p.titulo) Eliminar
+
+  section.panel-a(data-panel="usuarios")
+    .panel-cab
+      h2 Usuarios
+    .tabla-wrap
+      table.tabla
+        thead: tr
+          th Nombre
+          th Correo
+          th Rol
+          th
+        tbody
+          each u in usuarios
+            tr
+              td= u.nombre
+              td= u.email
+              td
+                if u.id === usuario.id
+                  span.tag Tú · #{u.rol === 'admin' ? 'Administrador' : 'Estudiante'}
+                else
+                  select.sel-rol(data-rol=u.id, aria-label="Rol de " + u.nombre)
+                    option(value="usuario", selected=u.rol === 'usuario') Estudiante
+                    option(value="admin", selected=u.rol === 'admin') Administrador
+              td.acciones
+                if u.id !== usuario.id
+                  button.mini.peligro(type="button", data-borrar="usuarios", data-id=u.id, data-nombre=u.nombre) Eliminar
+
+  dialog#modal
+    form#form-admin(novalidate)
+      h2#modal-titulo
+      #campos
+      .modal-acc
+        button.btn.sec(type="button", data-cerrar) Cancelar
+        button.btn(type="submit") Guardar
+  dialog#confirmar
+    p#confirmar-txt
+    .modal-acc
+      button.btn.sec(type="button", data-no) Cancelar
+      button.btn.peligro(type="button", data-si) Eliminar

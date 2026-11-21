@@ -1,0 +1,52 @@
+extends layout
+block contenido
+  include mixins
+  header.encabezado.aparece
+    h1 Materias
+    p.sub Marca el estado de cada materia. Tus cambios se guardan solos.
+  section.card.resumen.aparece
+    .res-item
+      b#r-aprobadas= resumen.aprobadas
+      span de #{resumen.total} aprobadas
+    .res-item
+      b#r-creditos= resumen.creditosAprobados
+      span de #{resumen.creditosTotales} créditos
+    .res-item
+      b#r-cursando= resumen.cursando
+      span cursando
+    .res-item
+      b#r-promedio= resumen.promedio !== null ? resumen.promedio : '—'
+      span promedio
+    .barra-prog.res-barra: span#r-barra(style=`width:${resumen.porcentaje}%`)
+  section.card.mapa-card.aparece
+    +mapa(semestres)
+    .leyenda
+      span.ley(data-estado="aprobada") Aprobada
+      span.ley(data-estado="cursando") Cursando
+      span.ley(data-estado="pendiente") Pendiente
+  .filtros.aparece
+    input#buscar(type="search", placeholder="Buscar materia o clave", autocomplete="off", aria-label="Buscar materia")
+    .chips
+      button.chip.activa(type="button", data-v="") Todas
+      each a in areas
+        button.chip(type="button", data-v=a)= a
+  each s in semestres
+    section.semestre(id="sem-" + s.n, data-sem=s.n)
+      header.sem-cab
+        h2 Semestre #{s.n}
+        span.sem-cont
+        .barra-prog.sem-barra: span
+      .materias-grid
+        each m in s.materias
+          article.materia.card(data-id=m.id, data-area=m.area, data-estado=m.estado, data-creditos=m.creditos, data-texto=(m.nombre + ' ' + m.clave + ' ' + m.area).toLowerCase())
+            .mat-top
+              span.clave= m.clave
+              span.tag= m.area
+            h3= m.nombre
+            p.mat-info #{m.creditos} créditos
+            .estado(role="group", aria-label="Estado de " + m.nombre)
+              each e in [['pendiente', 'Pendiente'], ['cursando', 'Cursando'], ['aprobada', 'Aprobada']]
+                button.est(type="button", data-estado=e[0], class=(m.estado === e[0] ? 'on' : ''))= e[1]
+            label.cal(class=(m.estado === 'aprobada' ? '' : 'oculto'))
+              span Calificación
+              input.cal-input(type="number", min="70", max="100", step="1", placeholder="70–100", value=m.calificacion)

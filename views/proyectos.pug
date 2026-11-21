@@ -1,0 +1,22 @@
+extends layout
+block contenido
+  header.encabezado.aparece
+    h1 Proyectos escolares
+    p.sub Ideas y ejemplos organizados por semestre para inspirarte en tus próximas entregas.
+  if proyectos.length
+    .filtros.aparece
+      .chips
+        button.chip.activa(type="button", data-v="") Todos
+        each s in semestres
+          button.chip(type="button", data-v=s) Semestre #{s}
+    section.grid-proy.aparece
+      each p in proyectos
+        article.proyecto.card(data-f=p.semestre)
+          span.tag Semestre #{p.semestre}
+          h3= p.titulo
+          p= p.descripcion
+          .techs
+            each t in p.tecnologias.split(',')
+              span.tech= t.trim()
+  else
+    p.vacio Todavía no hay proyectos publicados.

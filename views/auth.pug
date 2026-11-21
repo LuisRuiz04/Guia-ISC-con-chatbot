@@ -1,0 +1,66 @@
+extends layout
+block contenido
+  - const CUENTA = [6, 6, 6, 6, 6, 6, 6, 6, 5, 1]
+  section.auth
+    .auth-hero
+      .mapa.mapa-deco(aria-hidden="true")
+        each n, s in CUENTA
+          .mcol
+            - for (let m = 0; m < n; m++)
+              i.celda(data-estado=(s < 7 ? 'aprobada' : (s < 9 ? 'cursando' : 'pendiente')), style=`--d:${(s * 6 + m) * 22}ms`)
+      h1 Tu retícula,<br>a la vista.
+      p Consulta tus materias, marca tu avance, organiza tu tiempo y resuelve dudas con el chatbot de Ingeniería en Sistemas Computacionales.
+    .auth-card(data-vista="login")
+      .tabs(role="tablist")
+        button.tab.activa(type="button", data-tab="login", role="tab") Iniciar sesión
+        button.tab(type="button", data-tab="registro", role="tab") Crear cuenta
+        span.tab-ind
+      form#form-login.form.activo(novalidate, data-url="/login")
+        .campo
+          label(for="log-email") Correo
+          input#log-email(type="email", name="email", autocomplete="email", placeholder="tucorreo@ejemplo.com", required)
+          span.error-txt
+        .campo
+          label(for="log-password") Contraseña
+          .pass
+            input#log-password(type="password", name="password", autocomplete="current-password", placeholder="Tu contraseña", required)
+            button.ojo(type="button", aria-label="Mostrar u ocultar contraseña")
+          span.error-txt
+        button.btn.ancho(type="submit") Entrar
+      form#form-registro.form(novalidate, data-url="/registro")
+        .campo
+          label(for="reg-nombre") Nombre completo
+          input#reg-nombre(type="text", name="nombre", autocomplete="name", placeholder="Nombre y apellido", maxlength="80", required)
+          span.error-txt
+        .campo
+          label(for="reg-email") Correo
+          input#reg-email(type="email", name="email", autocomplete="email", placeholder="tucorreo@ejemplo.com", required)
+          span.error-txt
+        .campo
+          label(for="reg-password") Contraseña
+          .pass
+            input#reg-password(type="password", name="password", autocomplete="new-password", placeholder="Crea una contraseña segura", required)
+            button.ojo(type="button", aria-label="Mostrar u ocultar contraseña")
+          .fuerza(data-nivel="0"): span
+          ul.reglas
+            li(data-r="largo") 8 o más caracteres
+            li(data-r="mayus") Una mayúscula
+            li(data-r="minus") Una minúscula
+            li(data-r="num") Un número
+            li(data-r="simbolo") Un símbolo
+          span.error-txt
+        .campo
+          label(for="reg-confirmar") Confirmar contraseña
+          .pass
+            input#reg-confirmar(type="password", name="confirmar", autocomplete="new-password", placeholder="Repite tu contraseña", required)
+            button.ojo(type="button", aria-label="Mostrar u ocultar contraseña")
+          span.error-txt
+        fieldset.campo.rol-sel
+          legend Tipo de cuenta
+          label
+            input(type="radio", name="rol", value="usuario", checked)
+            span Estudiante
+          label
+            input(type="radio", name="rol", value="admin")
+            span Administrador
+        button.btn.ancho(type="submit") Crear cuenta

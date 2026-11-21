@@ -1,0 +1,31 @@
+extends layout
+block contenido
+  header.encabezado.aparece
+    h1= titulo
+    p.sub= intro
+  if tipo === 'tiempo'
+    section.pomo.card.aparece(data-modo="foco")
+      .pomo-info
+        h2 Temporizador de estudio
+        p Trabaja en bloques cortos con descansos. Elige un modo y presiona iniciar.
+        .pomo-modos
+          button.pomo-modo.on(type="button", data-min="25") Enfoque
+          button.pomo-modo(type="button", data-min="5") Descanso corto
+          button.pomo-modo(type="button", data-min="15") Descanso largo
+        .pomo-acc
+          button#pomo-iniciar.btn(type="button") Iniciar
+          button#pomo-reiniciar.btn.sec(type="button") Reiniciar
+      .pomo-reloj
+        svg.pomo-anillo(viewBox="0 0 120 120", aria-hidden="true")
+          circle.pa-fondo(cx="60", cy="60", r="52")
+          circle.pa-valor(cx="60", cy="60", r="52")
+        span#pomo-tiempo(role="timer") 25:00
+  if consejos.length
+    section.grid-consejos.aparece
+      each c in consejos
+        article.consejo.card
+          span.c-ico= c.icono
+          h3= c.titulo
+          p= c.contenido
+  else
+    p.vacio Aún no hay contenido en esta sección.

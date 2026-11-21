@@ -1,0 +1,15 @@
+extends layout
+block contenido
+  header.encabezado.aparece
+    h1 Chatbot
+    p.sub Pregúntame por tus materias, tu avance, hábitos de estudio o ideas de proyectos.
+  section.chat.card.aparece
+    #mensajes(aria-live="polite")
+    .sugerencias
+      button.sug(type="button") Materias del semestre 4
+      button.sug(type="button") ¿Cómo voy?
+      button.sug(type="button") Hábitos de estudio
+      button.sug(type="button") Ideas de proyectos
+    form#chat-form(autocomplete="off")
+      input#chat-input(type="text", placeholder="Escribe tu pregunta", maxlength="300", aria-label="Mensaje")
+      button.btn(type="submit") Enviar

@@ -1,0 +1,51 @@
+extends layout
+block contenido
+  include mixins
+  header.encabezado.aparece
+    h1 Hola, #{usuario.nombre.split(' ')[0]}
+    p.sub Así va tu avance en Ingeniería en Sistemas Computacionales.
+  section.hero.card.aparece
+    .hero-num
+      strong(data-cuenta=resumen.porcentaje, data-sufijo="%") #{resumen.porcentaje}%
+      span de la carrera aprobada
+    +mapa(semestres)
+    .leyenda
+      span.ley(data-estado="aprobada") Aprobada
+      span.ley(data-estado="cursando") Cursando
+      span.ley(data-estado="pendiente") Pendiente
+  section.stats.aparece
+    article.stat.card
+      span.stat-n #[b(data-cuenta=resumen.aprobadas) #{resumen.aprobadas}] / #{resumen.total}
+      span.stat-l Materias aprobadas
+    article.stat.card
+      span.stat-n #[b(data-cuenta=resumen.creditosAprobados) #{resumen.creditosAprobados}] / #{resumen.creditosTotales}
+      span.stat-l Créditos
+    article.stat.card
+      span.stat-n= resumen.promedio !== null ? resumen.promedio : '—'
+      span.stat-l Promedio
+    article.stat.card
+      span.stat-n #[b(data-cuenta=resumen.cursando) #{resumen.cursando}]
+      span.stat-l Cursando ahora
+  .dos-col.aparece
+    section.card.panel
+      h2 Siguientes por cursar
+      if siguientes.length
+        ul.lista
+          each m in siguientes
+            li
+              span.li-t= m.nombre
+              span.li-s Semestre #{m.semestre} · #{m.creditos} cr.
+      else
+        p.vacio Ya no tienes materias pendientes. ¡Felicidades!
+      a.enlace(href="/materias") Ver retícula completa
+    section.card.panel
+      h2 Cursando ahora
+      if cursando.length
+        ul.lista
+          each m in cursando
+            li
+              span.li-t= m.nombre
+              span.li-s Semestre #{m.semestre}
+      else
+        p.vacio Marca las materias que estás cursando en la sección Materias y aparecerán aquí.
+      a.enlace(href="/chat") Preguntarle al chatbot
